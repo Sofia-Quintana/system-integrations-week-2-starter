@@ -4,13 +4,19 @@
   "description": "System Integrations Week 2 Starter",
   "main": "app.js",
   "scripts": {
+    "start": "nodemon app.js",
     "test": "jest"
   },
   "keywords": [],
   "author": "JD",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.20.0",
     "ejs": "^3.1.6",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "socket.io": "^4.4.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
   }
 }
