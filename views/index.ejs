@@ -33,68 +33,22 @@
         <!-- Panel Chat -->
         <div class="panel" id="chat">
           <div class="panel-heading">
-            <h3 class="panel-title">
+            <h3 id="username" class="panel-title">
               <i class="icon wb-chat-text" aria-hidden="true"></i> Chat
             </h3>
           </div>
           <div class="panel-body">
-            <div class="chats">
-              <div class="chat">
-                <div class="chat-avatar">
-                  <a class="avatar avatar-online" data-toggle="tooltip" href="#" data-placement="right" title="" data-original-title="June Lane">
-                    <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="...">
-                    <i></i>
-                  </a>
-                </div>
-                <div class="chat-body">
-                  <div class="chat-content">
-                    <p>
-                      Good morning, sir.
-                      <br>What can I do for you?
-                    </p>
-                    <time class="chat-time" datetime="2015-07-01T11:37">11:37:08 am</time>
-                  </div>
-                </div>
-              </div>
-              <div class="chat chat-left">
-                <div class="chat-avatar">
-                  <a class="avatar avatar-online" data-toggle="tooltip" href="#" data-placement="left" title="" data-original-title="Edward Fletcher">
-                    <img src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="...">
-                    <i></i>
-                  </a>
-                </div>
-                <div class="chat-body">
-                  <div class="chat-content">
-                    <p>Well, I am just looking around.</p>
-                    <time class="chat-time" datetime="2015-07-01T11:39">11:39:57 am</time>
-                  </div>
-                </div>
-              </div>
-              <div class="chat">
-                <div class="chat-avatar">
-                  <a class="avatar avatar-online" data-toggle="tooltip" href="#" data-placement="right" title="" data-original-title="June Lane">
-                    <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="...">
-                    <i></i>
-                  </a>
-                </div>
-                <div class="chat-body">
-                  <div class="chat-content">
-                    <p>
-                      If necessary, please ask me.
-                    </p>
-                    <time class="chat-time" datetime="2015-07-01T11:40">11:40:10 am</time>
-                  </div>
-                </div>
-              </div>
+            <div id="chats" class="chats">
+              
             </div>
           </div>
           <div class="panel-footer">
-            <form>
+            <form id="message-form">
               <div class="input-group">
-                <input type="text" class="form-control" placeholder="Say something">
+                <input id="message" type="text" class="form-control" placeholder="Say something">
                 <span class="input-group-btn">
-                  <button class="btn btn-primary" type="button">Send</button>
-                  <button class="btn btn-primary" type="button">Update Name</button>
+                  <button class="btn btn-primary" type="submit" id="send-btn">Send</button>
+                  <button class="btn btn-primary" type="button" onclick="updateUsername()">Update Name</button>
                 </span>
               </div>
             </form>
@@ -113,18 +67,73 @@
     <script>
       const url = 'http://localhost:3000/user';   
       let socket = io();
+      let username = '';
+      const parentDiv = document.getElementById('chats');
+      const form = document.getElementById('message-form');
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        let input = document.getElementById('message');
+        if(input.value !== '') {
+          socket.emit('chat', { message: input.value, user: username });
+        }
+        input.value = '';
+      });
 
       socket.on('connect', () => {
         console.log(`I've connected with id: ${socket.id}`);
-
+        getData(socket.id);
       });
 
-      const getData = () => {
+      socket.on('message', (message) => {
+        console.log(message);
+        let parent = document.createElement('div');
+        message.user === username ? parent.classList.add('chat-left') : parent.classList.add('chat');
+        let body = document.createElement('div');
+        body.classList.add('chat-body');
+        let content = document.createElement('div');
+        content.classList.add('chat-content');
+        message.user === username ? content.innerText = `me: ${message.message}` : content.innerText = `${message.user}: ${message.message}`;
+        body.appendChild(content);
+        parent.appendChild(body);
+        parentDiv.appendChild(parent);
+      });
+
+      const getData = (id) => {
         const requestOptions = {
                 method: 'GET'
         };
-        
+        fetch(`${url}/${id}`, requestOptions)
+          .then(response => response.json())
+          .then(response => {
+            console.log(response);
+            username = response.username;
+            document.getElementById('username').textContent = response.username; 
+            });
       }
+
+      const updateUsername = () => {
+        const username = prompt('Please enter new Username:');
+        console.log(username);
+        const requestOptions = {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              id: socket.id,
+              name: username
+            })
+        };
+        fetch(url, requestOptions)
+          .then(response => response.json())
+          .then(result => {
+            console.log(result)
+            console.log(socket.id);
+            getData(socket.id);
+          });
+      };
+
     </script>
   </body>
 </html>

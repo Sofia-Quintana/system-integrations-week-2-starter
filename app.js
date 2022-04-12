@@ -3,9 +3,9 @@ const app = express();
 const server = require('http').createServer(app);
 const { Server } = require('socket.io');
 const io = new Server(server);
-const cors = require('cors');
 const content = require("./content/cards.json");
 const bodyParser = require('body-parser');
+const { findUser, updateUsername } = require('./services/userService');
 
 //data handlers
 let users = [];
@@ -25,9 +25,18 @@ app.get("/", (req, res) => {
   res.render("index", { content });
 });
 
-app.get('/users', (request, response) => {
+app.get('/user/:id', (request, response) => {
   try {
-    response.status(200).json(users);
+    response.status(200).json({ username: findUser(request.params.id, users) });
+  } catch(error) {
+    console.error(error);
+    response.status(404).json({ response: '404 not found'});
+  }
+});
+
+app.put('/user', (request, response) => {
+  try {
+    response.status(200).json({ response: `Updated ${updateUsername(request.body, users)}`});
   } catch(error) {
     console.error(error);
     response.status(404).json({ response: '404 not found'});
@@ -48,9 +57,14 @@ io.on('connection', (socket) => {
   connections++;
   console.log(`New user connected, total connected: ${connections}`);
   users.push({ id: socket.id, name: `User ${users.length+1}`});
+  socket.on('chat', (message) => {
+    messages.push(message);
+    io.emit('message', message);
+  });
   socket.on('disconnect', () => {
     connections--;
     console.log(`User disconnected, total connected: ${connections}`);
+    
   });
 });
 
