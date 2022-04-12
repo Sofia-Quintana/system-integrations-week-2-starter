@@ -16,116 +16,115 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css"
     />
-    <style>
-      img {
-        max-height: 60vh;
-        max-width: 80vw;
-        height: auto;
-        width: auto;
-      }
-      
-      .carousel-control-prev, .carousel-control-next {
-        max-height: 75%;
-      }
-    </style>
+    <link
+      rel="stylesheet"
+      href="./styles.css"
+    />
+    <link
+      rel="stylesheet" 
+      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" 
+    />
   </head>
 
-  <body class="d-flex flex-column h-100">
-    <header class="p-2 bg-light fixed-top">
-      <div class="container">
-        <div class="d-flex flex-wrap align-items-center justify-content-center">
-          <h1>DSU Chat Specs</h1>
-        </div>
-      </div>
-    </header>
-
-    <main class="flex-shrink-0 my-5">
-      <div class="container my-5">
-        <div
-          id="dsu-chat-instructions-carousel"
-          class="carousel carousel-dark slide"
-          data-bs-ride="carousel"
-        >
-          <div class="carousel-indicators">
-            <% content.map((cardContent, index) => { %>
-            <button
-              type="button"
-              data-bs-target="#dsu-chat-instructions-carousel"
-              <% if(cardContent.active) { %> 
-              class="active"
-              aria-current="true"
-              <% } %>
-              data-bs-slide-to="<%= index %>"
-              aria-label="Slide <%= index + 1 %>"
-              title="Slide <%= index + 1 %>"
-            ></button>
-            <% }); %>
+  <body>
+                        
+    <div class="container bootstrap snippets bootdeys">
+      <div class="col-md-7 col-xs-12 col-md-offset-2">
+        <!-- Panel Chat -->
+        <div class="panel" id="chat">
+          <div class="panel-heading">
+            <h3 class="panel-title">
+              <i class="icon wb-chat-text" aria-hidden="true"></i> Chat
+            </h3>
           </div>
-          <div class="carousel-inner">
-            <% content.map((cardContent) => { %>
-              <% if(cardContent.active) { %> 
-              <div class="carousel-item active">
-              <% } else { %>
-              <div class="carousel-item">
-              <% } %>
-                <div class="card mb-5 border-light">
-                  <div
-                    class="
-                      d-flex
-                      flex-wrap
-                      align-items-center
-                      justify-content-center
-                      my-3
-                    "
-                  >
-                    <img src="<%= cardContent.imgSrc %> " class="d-block" alt="..." />
-                  </div>
-                  <div class="card-body" z-index="-1">
-                    <h5 class="card-title"><%= cardContent.cardTitle %></h5>
-                    <p class="card-text">
-                      <%- cardContent.cardText %>
+          <div class="panel-body">
+            <div class="chats">
+              <div class="chat">
+                <div class="chat-avatar">
+                  <a class="avatar avatar-online" data-toggle="tooltip" href="#" data-placement="right" title="" data-original-title="June Lane">
+                    <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="...">
+                    <i></i>
+                  </a>
+                </div>
+                <div class="chat-body">
+                  <div class="chat-content">
+                    <p>
+                      Good morning, sir.
+                      <br>What can I do for you?
                     </p>
+                    <time class="chat-time" datetime="2015-07-01T11:37">11:37:08 am</time>
                   </div>
                 </div>
               </div>
-            <% }); %>
+              <div class="chat chat-left">
+                <div class="chat-avatar">
+                  <a class="avatar avatar-online" data-toggle="tooltip" href="#" data-placement="left" title="" data-original-title="Edward Fletcher">
+                    <img src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="...">
+                    <i></i>
+                  </a>
+                </div>
+                <div class="chat-body">
+                  <div class="chat-content">
+                    <p>Well, I am just looking around.</p>
+                    <time class="chat-time" datetime="2015-07-01T11:39">11:39:57 am</time>
+                  </div>
+                </div>
+              </div>
+              <div class="chat">
+                <div class="chat-avatar">
+                  <a class="avatar avatar-online" data-toggle="tooltip" href="#" data-placement="right" title="" data-original-title="June Lane">
+                    <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="...">
+                    <i></i>
+                  </a>
+                </div>
+                <div class="chat-body">
+                  <div class="chat-content">
+                    <p>
+                      If necessary, please ask me.
+                    </p>
+                    <time class="chat-time" datetime="2015-07-01T11:40">11:40:10 am</time>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <button
-            class="carousel-control-prev"
-            type="button"
-            data-bs-target="#dsu-chat-instructions-carousel"
-            data-bs-slide="prev"
-          >
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-          </button>
-          <button
-            class="carousel-control-next"
-            type="button"
-            data-bs-target="#dsu-chat-instructions-carousel"
-            data-bs-slide="next"
-          >
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-          </button>
+          <div class="panel-footer">
+            <form>
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="Say something">
+                <span class="input-group-btn">
+                  <button class="btn btn-primary" type="button">Send</button>
+                  <button class="btn btn-primary" type="button">Update Name</button>
+                </span>
+              </div>
+            </form>
+          </div>
         </div>
+        <!-- End Panel Chat -->
       </div>
-    </main>
-
-    <footer class="footer mt-auto py-3 bg-light fixed-bottom">
-      <div class="container">
-        <div class="d-flex flex-wrap align-items-center justify-content-center">
-          Copyright Telus <%= (new Date()).getFullYear() %>
-        </div>
-      </div>
-    </footer>
+    </div>             
 
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
       crossorigin="anonymous"
     ></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const url = 'http://localhost:3000/user';   
+      let socket = io();
 
-    <script></script>
+      socket.on('connect', () => {
+        console.log(`I've connected with id: ${socket.id}`);
+
+      });
+
+      const getData = () => {
+        const requestOptions = {
+                method: 'GET'
+        };
+        
+      }
+    </script>
   </body>
 </html>
